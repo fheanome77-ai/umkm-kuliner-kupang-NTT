@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galeri Media — Budaya NTT</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #fdf6ec;
+    color: #2e3d2f;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #b34700;
+    color: white;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .navbar .logo { font-size: 1.3rem; font-weight: bold; }
+  .navbar nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: background 0.3s;
+    font-size: 0.95rem;
+  }
+  .navbar nav a:hover { background: #7a2f00; }
+  .navbar nav a.active { background: #7a2f00; font-weight: bold; }
+
+  /* ===== BREADCRUMB ===== */
+  .breadcrumb {
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
+    color: #666;
+    background: #fff4e6;
+  }
+  .breadcrumb a { color: #b34700; text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, #ffcc80, #ffb74d);
+    color: #4e2600;
+  }
+  .hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .hero p { font-size: 1.05rem; }
+
+  /* ===== CONTENT ===== */
+  .content { padding: 1rem 2rem 3rem; max-width: 1200px; margin: auto; }
+
+  /* ===== SECTION TITLE ===== */
+  .section-title {
+    text-align: center;
+    color: #b34700;
+    margin: 2.5rem 0 1rem;
+    font-size: 1.4rem;
+    scroll-margin-top: 100px;
+  }
+
+  /* ===== GALERI FOTO ===== */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    cursor: pointer;
+    aspect-ratio: 4/3;
+    background: #eee;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+
+  .gallery-item:hover img { transform: scale(1.08); }
+
+  .gallery-item .caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    padding: 1.5rem 0.8rem 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-item:hover .caption { opacity: 1; }
+
+  /* ===== AUDIO & VIDEO ===== */
+  .media-block {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    margin-bottom: 1.5rem;
+    border-left: 6px solid #ffb74d;
+  }
+
+  .media-block h3 {
+    color: #b34700;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .media-block audio,
+  .media-block video {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .lightbox.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .lightbox img {
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    color: white;
+    font-size: 2.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .lightbox-close:hover { color: #ffb74d; }
+
+  .lightbox-caption {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background: rgba(0,0,0,0.6);
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+
+  /* ===== CROSS LINKS ===== */
+  .cross-links {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px dashed #ffb74d;
+    text-align: center;
+  }
+  .cross-links h3 { color: #b34700; margin-bottom: 0.8rem; }
+
+  .btn {
+    display: inline-block;
+    background: #b34700;
+    color: white;
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    margin: 0.3rem 0.3rem;
+    font-weight: 500;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn:hover {
+    background: #7a2f00;
+    transform: translateY(-2px);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: #b34700;
+    color: white;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .navbar { flex-direction: column; align-items: flex-start; }
+    .navbar nav a { display: inline-block; margin: 0.2rem 0.2rem 0.2rem 0; }
+    .hero h1 { font-size: 1.4rem; }
+    .content { padding: 1rem; }
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">🌿 Budaya NTT</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profil.html">Profil UMKM</a>
+      <a href="galeri.html" class="active">Galeri Media</a>
+      <a href="index.html">Katalog UMKM</a>
+      <a href="peta.html">Peta Interaktif</a>
+    </nav>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a> › <span>Galeri Media</span>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>📸 Galeri Media Budaya NTT</h1>
+    <p>Koleksi foto, audio, dan video dokumentasi budaya & UMKM NTT</p>
+  </section>
+
+  <!-- KONTEN -->
+  <main class="content">
+
+    <!-- ===== FOTO ===== -->
+    <h2 id="foto" class="section-title">📷 Foto Kuliner UMKM Kupang</h2>
+
+    <div class="gallery-grid">
+      <div class="gallery-item" onclick="openLightbox(this, 'Jagung Bose — makanan pokok NTT')">
+        <img src="gambar/jagung.jpg" alt="gambar">
+        <div class="caption">Jagung Bose</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this, 'Se\'i Sapi — daging asap khas Timor')">
+        <img src="gambar/Se'i Sapi.jpg" alt="gambar">
+        <div class="caption">Se'i Sapi</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this, 'Kue Rambut — kue tradisional renyah')">
+        <img src="gambar/kue Rambut.jpg"gambar">
+        <div class="caption">Kue Rambut</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this, 'Tenun Ikat — kain khas NTT')">
+        <img src="gambar/Tenun Ikat.jpg"gambar">
+        <div class="caption">Tenun Ikat</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this, 'Kopi Timor — arabika khas')">
+        <img src="gambar/Kopi Timor.jpg"gambar">
+        <div class="caption">Kopi Timor</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this, 'Sopi — minuman tradisional')">
+        <img src="gambar/Sopi Timor.jpg"gambar">
+        <div class="caption">Sopi Timor</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this, 'Rumah Adat Bena — arsitektur megalitik')">
+        <img src="gambar/Rumah Adat TTS.jpg"gambar">
+        <div class="caption">Rumah Adat TTS</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this, 'Suku Boti — masyarakat adat TTS')">
+        <img src="gambar/Suku Boti.jpg"gambar">
+        <div class="caption">Suku Boti</div>
+      </div>
+    </div>
+
+    <!-- ===== AUDIO ===== -->
+    <h2 id="audio" class="section-title">🎧 Audio Wawancara & Musik</h2>
+
+    <div class="media-block">
+      <h3>🎙️ Audio Natoni</h3>
+      <audio controls>
+        <source src="Audio/Audio Natoni.mp4"audio/mpeg">
+        Browser Anda tidak mendukung audio.
+      </audio>
+    </div>
+
+    <div class="media-block">
+      <h3>🎵 Musik Tradisional</h3>
+      <audio controls>
+        <source src="Audio/Audio Pengiring Makan.mp4"audio/mpeg">
+        Browser Anda tidak mendukung audio.
+      </audio>
+    </div>
+
+    <!-- ===== VIDEO ===== -->
+    <h2 id="video" class="section-title">🎬 Video Dokumenter</h2>
+
+   <div class="media-block">
+  <h3>🎥 Video penggiring Makan</h3>
+  <video controls autoplay muted playsinline preload="metadata">
+    <source src="Video/Vidio pengiring Makan.mp4" type="video/mp4">
+    Browser Anda tidak mendukung video.
+  </video>
+</div>
+
+ <div class="media-block">
+  <h3>🎥 Video pembuatan se'i sapi</h3>
+  <video controls autoplay muted playsinline preload="metadata">
+    <source src="video/pembuatan_sei_sapi.mp4" type="video/mp4">
+    Browser Anda tidak mendukung video.
+  </video>
+</div>
+
+ <div class="media-block">
+  <h3>🎥 Video pembuatan keripik pisang</h3>
+  <video controls autoplay muted playsinline preload="metadata">
+    <source src="Video/pembuatan keripik pisang.mp4" type="video/mp4">
+    Browser Anda tidak mendukung video.
+  </video>
+
+  <div class="media-block">
+  <h3>🎥 Video pembuatan kue rambut</h3>
+  <video controls autoplay muted playsinline preload="metadata">
+    <source src="Video/pembuatan kue rambut.mp4" type="video/mp4">
+    Browser Anda tidak mendukung video.
+  </video>
+
+    <!-- CROSS LINKS -->
+    <section class="cross-links">
+      <h3>🔀 Jelajahi Juga:</h3>
+      <a href="index.html" class="btn">🍲 Katalog UMKM</a>
+      <a href="profil.html" class="btn">🏛️ Profil Budaya</a>
+      <a href="peta.html" class="btn">🗺️ Peta </a>
+      <a href="index.html" class="btn">🏠 Kembali ke Home</a>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2025 Kelompok 3 — Proyek Mini OBE Hypermedia Interaktif</p>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    /* ===== LIGHTBOX ===== */
+    function openLightbox(el, caption) {
+      const lb = document.getElementById('lightbox');
+      const img = el.querySelector('img');
+      const lbImg = document.getElementById('lightboxImg');
+      const lbCap = document.getElementById('lightboxCaption');
+
+      lbImg.src = img.src;
+      lbCap.textContent = caption || img.alt;
+      lb.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // Tutup dengan ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    console.log('📸 Galeri Media Budaya NTT siap!');
+  </script>
+
+</body>
+</html>

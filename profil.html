@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Katalog Kuliner UMKM — Budaya NTT</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #fdf6ec;
+    color: #2e3d2f;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #b34700;
+    color: white;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .navbar .logo { font-size: 1.3rem; font-weight: bold; }
+  .navbar nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: background 0.3s;
+    font-size: 0.95rem;
+  }
+  .navbar nav a:hover { background: #7a2f00; }
+  .navbar nav a.active { background: #7a2f00; font-weight: bold; }
+
+  /* ===== BREADCRUMB ===== */
+  .breadcrumb {
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
+    color: #666;
+    background: #fff4e6;
+  }
+  .breadcrumb a { color: #b34700; text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, #ffcc80, #ffb74d);
+    color: #4e2600;
+  }
+  .hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .hero p { font-size: 1.05rem; }
+
+  /* ===== CONTENT ===== */
+  .content { padding: 1rem 2rem 3rem; max-width: 1100px; margin: auto; }
+
+  /* ===== SECTION ===== */
+  .section {
+    background: white;
+    border-radius: 14px;
+    padding: 1.8rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    border-left: 6px solid #b34700;
+    scroll-margin-top: 100px;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section h2 {
+    color: #b34700;
+    margin-bottom: 0.8rem;
+    font-size: 1.4rem;
+  }
+
+  .section h3 {
+    color: #7a2f00;
+    margin: 1.2rem 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .section p { margin-bottom: 0.8rem; text-align: justify; }
+
+  .section ul { margin: 0.5rem 0 1rem 1.5rem; }
+  .section li { margin: 0.4rem 0; }
+
+  /* ===== INFO GRID ===== */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .info-box {
+    background: #fff8e1;
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: center;
+    border-top: 4px solid #ffb74d;
+    transition: transform 0.3s;
+  }
+
+  .info-box:hover { transform: translateY(-4px); }
+
+  .info-box .icon { font-size: 2rem; margin-bottom: 0.4rem; }
+  .info-box h4 { color: #b34700; font-size: 1rem; margin-bottom: 0.3rem; }
+  .info-box p { font-size: 0.85rem; color: #666; text-align: center; }
+
+  /* ===== TABEL PRODUK ===== */
+  .produk-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .produk-table thead {
+    background: #b34700;
+    color: white;
+  }
+
+  .produk-table th,
+  .produk-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  .produk-table tbody tr:nth-child(even) {
+    background: #fff8e1;
+  }
+
+  .produk-table tbody tr:hover {
+    background: #ffe0b2;
+  }
+
+  /* ===== MEDIA EMBED ===== */
+  .media-embed {
+    margin: 1rem 0;
+    background: #fff8e1;
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid #ffb74d;
+  }
+
+  .media-embed .label {
+    font-weight: bold;
+    color: #b34700;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .media-embed audio,
+  .media-embed video {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  /* ===== CARD UMKM ===== */
+  .umkm-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem;
+    margin: 1.2rem 0;
+  }
+
+  .umkm-item {
+    background: #fff8e1;
+    border-radius: 12px;
+    padding: 1.2rem;
+    border-left: 5px solid #ffb74d;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .umkm-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  }
+
+  .umkm-item h4 {
+    color: #b34700;
+    margin-bottom: 0.4rem;
+    font-size: 1rem;
+  }
+
+  .umkm-item p {
+    font-size: 0.85rem;
+    color: #666;
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
+
+  .umkm-item .harga {
+    display: inline-block;
+    background: #b34700;
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  /* ===== CROSS LINKS ===== */
+  .cross-links {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px dashed #ffb74d;
+    text-align: center;
+  }
+  .cross-links h3 { color: #b34700; margin-bottom: 0.8rem; }
+
+  .btn {
+    display: inline-block;
+    background: #b34700;
+    color: white;
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    margin: 0.3rem 0.3rem;
+    font-weight: 500;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn:hover {
+    background: #7a2f00;
+    transform: translateY(-2px);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: #b34700;
+    color: white;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .navbar { flex-direction: column; align-items: flex-start; }
+    .navbar nav a { display: inline-block; margin: 0.2rem 0.2rem 0.2rem 0; }
+    .hero h1 { font-size: 1.4rem; }
+    .content { padding: 1rem; }
+    .section { padding: 1.2rem; }
+    .produk-table { font-size: 0.8rem; }
+    .produk-table th, .produk-table td { padding: 0.5rem 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">🌿 Budaya NTT</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profil.html" class="active">Profil UMKM</a>
+      <a href="galeri.html">Galeri Media</a>
+      <a href="index.html">Katalog UMKM</a>
+      <a href="peta.html">Peta</a>
+    </nav>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a> › <span>Profil Katalog Kuliner UMKM</span>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>🍲 Profil Katalog Kuliner UMKM Kupang</h1>
+    <p>Mengenal lebih dekat UMKM kuliner khas Nusa Tenggara Timur</p>
+  </section>
+
+  <!-- KONTEN -->
+  <main class="content">
+
+    <!-- ===== TENTANG KATALOG ===== -->
+    <section id="tentang" class="section">
+      <h2>📖 Tentang Katalog Kuliner UMKM</h2>
+      <p>Katalog UMKM Kuliner Kupang merupakan wadah informasi digital yang menyajikan berbagai produk kuliner khas Nusa Tenggara Timur, khususnya dari Kota Kupang dan sekitarnya. Katalog ini bertujuan untuk memperkenalkan cita rasa lokal kepada masyarakat luas sekaligus mendukung pertumbuhan UMKM daerah.</p>
+      <p>Setiap produk dalam katalog ini dikurasi berdasarkan keaslian resep, bahan lokal, dan nilai budaya yang terkandung di dalamnya. Dari makanan pokok tradisional hingga oleh-oleh khas, semuanya tersedia dalam satu platform.</p>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="icon">🏪</div>
+          <h4>UMKM Terdaftar</h4>
+          <p>25+ pelaku usaha kuliner lokal</p>
+        </div>
+        <div class="info-box">
+          <div class="icon">🍽️</div>
+          <h4>Produk Kuliner</h4>
+          <p>7 kategori produk unggulan</p>
+        </div>
+        <div class="info-box">
+          <div class="icon">📍</div>
+          <h4>Lokasi</h4>
+          <p>Kota Kupang & sekitarnya</p>
+        </div>
+        <div class="info-box">
+          <div class="icon">🌿</div>
+          <h4>Bahan Lokal</h4>
+          <p>100% bahan alami NTT</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== KATEGORI PRODUK ===== -->
+    <section id="kategori" class="section">
+      <h2>🍽️ Kategori Produk Kuliner</h2>
+      <p>Katalog ini terbagi menjadi tiga kategori utama yang mewakili kekayaan kuliner NTT:</p>
+
+      <h3>🍲 Kuliner Tradisional</h3>
+      <ul>
+        <li><strong>Jagung Bose</strong> : makanan pokok dari jagung, kacang merah & labu</li>
+        <li><strong>Se'i Sapi</strong> : daging sapi asap khas Timor</li>
+        <li><strong>Kue Rambut</strong> : kue tradisional renyah dari tepung beras</li>
+      </ul>
+
+      <h3>🥤 Minuman Khas</h3>
+      <ul>
+        <li><strong>Sopi</strong> : minuman tradisional fermentasi nira lontar</li>
+        <li><strong>Es Lemon NTT</strong> : minuman segar dari lemon lokal & gula aren</li>
+      </ul>
+
+      <h3>🎁 Oleh-oleh</h3>
+      <ul>
+        <li><strong>Tenun Ikat</strong> : kain tenun motif khas dengan filosofi</li>
+        <li><strong>Kopi Timor</strong> : kopi arabika khas dengan aroma kuat</li>
+        <li><strong>Keripik Pisang</strong> : </li>
+
+      </ul>
+    </section>
+
+    <!-- ===== DAFTAR PRODUK UNGGULAN ===== -->
+    <section id="produk" class="section">
+      <h2>⭐ Produk Unggulan</h2>
+      <p>Berikut adalah daftar produk kuliner unggulan yang tersedia di katalog UMKM Kuliner Kupang:</p>
+
+      <table class="produk-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Produk</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>🌽 Jagung Bose</td>
+            <td>Kuliner Tradisional</td>
+            <td>Rp 15.000</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>🥩 Se'i Sapi</td>
+            <td>Kuliner Tradisional</td>
+            <td>Rp 50.000</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>🍰 Kue Rambut</td>
+            <td>Kuliner Tradisional</td>
+            <td>Rp 20.000</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>🍶 Sopi</td>
+            <td>Minuman Khas</td>
+            <td>Rp 35.000</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>🍋 Es Lemon NTT</td>
+            <td>Minuman Khas</td>
+            <td>Rp 10.000</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>🧵 Tenun Ikat</td>
+            <td>Oleh-oleh</td>
+            <td>Rp 250.000</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>☕ Kopi Timor</td>
+            <td>Oleh-oleh</td>
+            <td>Rp 45.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== PROFIL UMKM ===== -->
+    <section id="umkm" class="section">
+      <h2>🏪 Profil UMKM Mitra</h2>
+      <p>Beberapa UMKM kuliner yang menjadi mitra dalam katalog ini:</p>
+
+      <div class="umkm-list">
+        <div class="umkm-item">
+          <h4>🍲 Dapur Mama NTT</h4>
+          <p>Spesialis Jagung Bose & Se'i Sapi dengan resep turun-temurun dari Timor.</p>
+          <span class="harga">Sejak 2015</span>
+        </div>
+        <div class="umkm-item">
+          <h4>🍰 Kue Rambut Bu Ratna</h4>
+          <p>Produsen kue rambut tradisional dengan cita rasa autentik Kupang.</p>
+          <span class="harga">Sejak 2010</span>
+        </div>
+        <div class="umkm-item">
+          <h4>🧵 Tenun Ikat Timor</h4>
+          <p>Pengrajin tenun ikat dengan motif khas dan pewarna alami.</p>
+          <span class="harga">Sejak 2008</span>
+        </div>
+        <div class="umkm-item">
+          <h4>☕ Kopi Timor Arabika</h4>
+          <p>Petani kopi lokal penghasil arabika kualitas ekspor dari Timor.</p>
+          <span class="harga">Sejak 2012</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MEDIA ===== -->
+    <section id="media" class="section">
+      <h2>🎧 Media Pendukung</h2>
+      <p>Dengarkan dan tonton dokumentasi seputar UMKM kuliner Kupang:</p>
+
+      <div class="media-embed">
+        <span class="label">🎙️ Wawancara Pemilik UMKM Kuliner</span>
+        <audio controls>
+          <source src="lgdaerah.mp4" type="">
+          lagu daeah khas NTT
+        </audio>
+      </div>
+
+      <div class="media-embed">
+        <span class="label">🎬 perkenalan makanan Khas NTT</span>
+        <video controls>
+          <source src="mkn.mp4" type="">
+        </video>
+      </div>
+
+       <div class="gallery-grid">
+      <div class="gallery-item" onclick="openLightbox(this, 'Jagung Bose — makanan pokok NTT')">
+        <img src="jagung.jpg" alt="">
+        <div class="caption">Jagung Bose</div>
+        <p class="desc">Makanan pokok dari jagung, kacang tanah & dan kacang hijau</p>
+      </div>
+      
+    </section>
+
+    <!-- ===== VISI & MISI ===== -->
+    <section id="visi-misi" class="section">
+      <h2>🎯 Visi & Misi</h2>
+      <h3>Visi</h3>
+      <p>Menjadi katalog digital kuliner NTT terdepan yang mendukung pertumbuhan UMKM lokal dan melestarikan cita rasa tradisional.</p>
+
+      <h3>Misi</h3>
+      <ul>
+        <li>Menyediakan informasi lengkap dan akurat tentang produk kuliner NTT</li>
+        <li>Mendukung pemasaran digital UMKM kuliner Kupang</li>
+        <li>Melestarikan resep dan tradisi kuliner lokal</li>
+        <li>Menghubungkan produsen lokal dengan pasar yang lebih luas</li>
+      </ul>
+    </section>
+
+    <!-- CROSS LINKS -->
+    <section class="cross-links">
+      <h3>🔀 Jelajahi Juga:</h3>
+      <a href="index.html" class="btn">🍲 Katalog UMKM</a>
+      <a href="galeri.html" class="btn">📸 Galeri Foto</a>
+      <a href="peta.html" class="btn">🗺️ Peta Interaktif</a>
+      <a href="index.html" class="btn">🏠 Kembali ke Home</a>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2025 Kelompok 3 — Proyek Mini OBE Hypermedia Interaktif</p>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    /* ===== SMOOTH SCROLL KE ANCHOR ===== */
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          target.style.boxShadow = '0 0 0 4px #ffb74d';
+          setTimeout(() => { target.style.boxShadow = '0 4px 14px rgba(0,0,0,0.08)'; }, 1200);
+        }
+      });
+    });
+
+    console.log('🍲 Profil Katalog Kuliner UMKM siap!');
+  </script>
+
+</body>
+</html>
